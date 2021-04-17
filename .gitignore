@@ -1,15 +1,9 @@
-# hidden files
-.*
-!.github
-
-# bundler cache
-_site
-vendor
-Gemfile.lock
-
-# rubygem
-*.gem
-
-# npm dependencies
-node_modules
-package-lock.json
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+.env
+.env.build
