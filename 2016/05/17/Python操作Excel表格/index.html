@@ -1,0 +1,689 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Python," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近需要用到Python来操作excel表，读取表格内容到数据库。所以就搜索了相关资料。查找了一下，可以操作excel表的几个库有以下几个：
+
+
+openpyxl这个是推荐使用的库，可以读写Excel 2010以上格式，以.xlsx结尾的文件。
+
+xlsxwriter这个支持.xlsx,但是只支持写入，格式化等操作，不支持读取。
+
+xlrd这个支持读取数据，支持以xls结尾的文件，也就是比较老的格">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python操作Excel表格">
+<meta property="og:url" content="http://hiden.me/2016/05/17/Python操作Excel表格/index.html">
+<meta property="og:site_name" content="Hiden">
+<meta property="og:description" content="最近需要用到Python来操作excel表，读取表格内容到数据库。所以就搜索了相关资料。查找了一下，可以操作excel表的几个库有以下几个：
+
+
+openpyxl这个是推荐使用的库，可以读写Excel 2010以上格式，以.xlsx结尾的文件。
+
+xlsxwriter这个支持.xlsx,但是只支持写入，格式化等操作，不支持读取。
+
+xlrd这个支持读取数据，支持以xls结尾的文件，也就是比较老的格">
+<meta property="og:image" content="https://segmentfault.com/img/bVvKy2">
+<meta property="og:updated_time" content="2016-05-22T12:46:29.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python操作Excel表格">
+<meta name="twitter:description" content="最近需要用到Python来操作excel表，读取表格内容到数据库。所以就搜索了相关资料。查找了一下，可以操作excel表的几个库有以下几个：
+
+
+openpyxl这个是推荐使用的库，可以读写Excel 2010以上格式，以.xlsx结尾的文件。
+
+xlsxwriter这个支持.xlsx,但是只支持写入，格式化等操作，不支持读取。
+
+xlrd这个支持读取数据，支持以xls结尾的文件，也就是比较老的格">
+<meta name="twitter:image" content="https://segmentfault.com/img/bVvKy2">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Python操作Excel表格 | Hiden </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hiden</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">隐形</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python操作Excel表格
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-17T21:11:34+08:00" content="2016-05-17">
+              2016-05-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近需要用到Python来操作excel表，读取表格内容到数据库。所以就搜索了相关资料。<br>查找了一下，可以操作excel表的几个库有以下几个：</p>
+<blockquote>
+<ul>
+<li><p>openpyxl<br>这个是推荐使用的库，可以读写Excel 2010以上格式，以.xlsx结尾的文件。</p>
+</li>
+<li><p>xlsxwriter<br>这个支持.xlsx,但是只支持写入，格式化等操作，不支持读取。</p>
+</li>
+<li>xlrd<br>这个支持读取数据，支持以xls结尾的文件，也就是比较老的格式。</li>
+<li>xlwt<br>这个和上面的相对应，支持写入书和格式化数据，支持xls结尾的文件格式。</li>
+<li>xlutils<br>这个是整合了xlrd和xlwt两个库的功能。<h4 id="经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明"><a href="#经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明" class="headerlink" title="经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明"></a><strong>经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明</strong></h4><a id="more"></a>
+<a href="https://openpyxl.readthedocs.io/en/default/index.html" target="_blank" rel="external">以下参考官方文档</a></li>
+</ul>
+</blockquote>
+<ul>
+<li><p>创建一个工作簿</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from openpyxl import Workbook</span><br><span class="line">wb = Workbook()</span><br><span class="line">ws = wb.active             #默认创建第一个表，默认名字为sheet</span><br><span class="line">ws1 = wb.create_sheet()    #创建第二个表</span><br><span class="line">ws1.title = "New Title"    #为第二个表设置名字</span><br><span class="line">ws2 = wb.get_sheet_by_name(</span><br><span class="line">New Title")                #通过名字获取表，和第二个表示一个表</span><br><span class="line">ws1.save('your_name.xlsx') #保存</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>读取一个工作簿中的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from openpyxl import load_workbook</span><br><span class="line">wb = load_workbook(&apos;myname.xlsx&apos;)  #加载一个工作簿</span><br><span class="line">print wb.get_sheet_names()         #获取各个sheet的名字</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>简单的用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openpyxl <span class="keyword">import</span> Workbook</span><br><span class="line"><span class="keyword">from</span> openpyxl.compat <span class="keyword">import</span> range</span><br><span class="line"><span class="keyword">from</span> openpyxl.cell <span class="keyword">import</span> get_column_letter</span><br><span class="line">wb = Workbook()</span><br><span class="line">dest_filename = <span class="string">'empty_book.xlsx'</span></span><br><span class="line">ws1 = wb.active              <span class="comment">#第一个表</span></span><br><span class="line">ws1.title = <span class="string">"range names"</span>    <span class="comment">#第一个表命名</span></span><br><span class="line"><span class="comment">#遍历第一个表的1到39行，每行赋值从1到599.</span></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">40</span>):</span><br><span class="line">    ws1.append(range(<span class="number">600</span>))</span><br><span class="line">ws2 = wb.create_sheet(title=<span class="string">"Pi"</span>) <span class="comment"># 创建第二个表</span></span><br><span class="line">ws2[<span class="string">'F5'</span>] = <span class="number">3.14</span>     <span class="comment">#为第二个表的F5单元格赋值为3.14</span></span><br><span class="line">ws3 = wb.create_sheet(title=<span class="string">"Data"</span>)  <span class="comment">#创建第三个表</span></span><br><span class="line"> /* 下面遍历第三个表的<span class="number">10</span>到<span class="number">19</span>行，<span class="number">27</span>到<span class="number">53</span>列，并对每一行的单元格赋一个当前列名的名字,如下图 */</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">10</span>,<span class="number">20</span>):</span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">27</span>,<span class="number">54</span>):</span><br><span class="line">        _=ws3.cell(column=col,row=row,value=<span class="string">"%s"</span> % get_column_letter(col)) <span class="comment">#_当作一个普通的变量，一般表示后边不再使用</span></span><br><span class="line">wb.save(filename=dest_filename) <span class="comment">#保存</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="https://segmentfault.com/img/bVvKy2" alt="图片"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/07/Winows平台Python2与Python3共存/" rel="next" title="Winows平台Python2与Python3共存">
+                <i class="fa fa-chevron-left"></i> Winows平台Python2与Python3共存
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/01/Python遍历文件夹并改名/" rel="prev" title="Python遍历文件夹并改名">
+                Python遍历文件夹并改名 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/16176848?v=3&s=460"
+               alt="Injet" />
+          <p class="site-author-name" itemprop="name">Injet</p>
+          <p class="site-description motion-element" itemprop="description">思考感悟 学习总结</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/injetlee" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/InjetLee" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://segmentfault.com/blog/injet" target="_blank" title="SegmentFault">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  SegmentFault
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/234339334" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明"><span class="nav-number">1.</span> <span class="nav-text">经过对比我还是选择了openpyxl这个库，下面针对这个库的使用进行说明</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Injet</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
